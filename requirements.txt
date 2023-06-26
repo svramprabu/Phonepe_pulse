@@ -1,0 +1,13 @@
+#MySQL-python
+#mysql
+mysql-connector-python
+streamlit
+streamlit-extras
+pandas
+pymongo
+
+sqlalchemy
+
+google-api-python-client
+google-auth-httplib2
+google-auth-oauthlib

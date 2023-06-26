@@ -8,6 +8,16 @@ import pandas as pd
 import mysql.connector
 from mysql.connector import Error
 
+
+import subprocess
+
+def clone_repository(url, destination):
+    # Execute the Git command to clone the repository
+    subprocess.run(['git', 'clone', url, destination])
+
+
+
+
 def to_create_aggregated_transaction_dataframe():
     aggregated_tx_df = pd.DataFrame()
     for year in range(2018,2023):
@@ -570,12 +580,18 @@ def to_create_top_users_dataframe_by_state():
 
 if __name__ == "__main__":
     import sqlite3
+    # Example usage
+    repository_url = 'https://github.com/PhonePe/pulse'
+    # repository_url = 'https://github.com/username/repository.git'
+    destination_path = r'C:\Users\SVR\Documents\GitHub\Phonepe_pulse\pulse' 
+
+    clone_repository(repository_url, destination_path)
 
     try:
             mydb = mysql.connector.connect(
                 host="aws.connect.psdb.cloud",
-                                            user="l7nhgfdaho498lxfjriu",
-                                            password="pscale_pw_MfDBUnlbjnrz22gSpBeBBIr3ilFJqG3RVw03IalBXmx",
+                                            user="b35uhgwzg8q87usj5p17", #"l7nhgfdaho498lxfjriu",
+                                            password="pscale_pw_qrRj52rPNXhapLTddDWLWX6D4rVAZyVJBmpAKZIqTZH",
                                             database="yt_details",)
                                             # host='localhost',
                                             #         # database='sql12618369',
@@ -614,7 +630,7 @@ if __name__ == "__main__":
                 # to_create_map_of_users_dataframe()
                 
                 # #     # map_state_user_df = 
-                to_create_map_of_users_dataframe_by_state()
+                # to_create_map_of_users_dataframe_by_state()
                 
                 # #     # top_tx_df = 
                 # to_create_top_transactions_dataframe()
