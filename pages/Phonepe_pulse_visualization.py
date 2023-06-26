@@ -1,4 +1,5 @@
 import os
+import re
 import streamlit as st
 import geopandas as gpd
 import pandas as pd
@@ -21,26 +22,39 @@ query = f"SELECT distinct state_name FROM aggregated_state_tx_df;"
 state_names_df = pd.read_sql(query,mydb)
 states_list = list(state_names_df['state_name'])
 user_state = st.sidebar.selectbox('choose the state',list(state_names_df['state_name']))
-   
+
+sql_query="SELECT name FROM sqlite_master WHERE type='table';"
+cursor.execute(sql_query)
+tables=[]
+for table in (cursor.fetchall()):
+    tables.append(table[0])
+table_option = st.sidebar.selectbox("list of tables in db",tables)
+# st.write(tables)
+query = f"SELECT * FROM {table_option};"
+display_df = pd.read_sql(query,mydb)
+st.write(display_df)
+
 if user_option == 'transactions':
     user_choice = st.selectbox('choose the state',['aggregated','map','top'])
     
-    sql_query="SELECT name FROM sqlite_master WHERE type='table';"
-    cursor.execute(sql_query)
-    tables=[]
-    for table in (cursor.fetchall()):
-        tables.append(table[0])
-    st.write(tables)
+
 
     if user_choice == 'aggregated':
-        Q=f"SELECT name,count,amount FROM aggregated_tx_df WHERE year = '{user_year}' and quarter = '{user_quarter}';"
+        
+        regex_pattern=r"(aggregated).*(tx)"
+        matches = [item for item in tables if re.match(regex_pattern, item)]
+        user_table = st.selectbox("choose",matches)
+
+        Q=f"SELECT name as Type_of_Transaction,count as Number_of_transactions,amount as Rs_in_Crores FROM aggregated_tx_df WHERE year = '{user_year}' and quarter = '{user_quarter}';"
         df = pd.read_sql(Q,mydb)
         # st.write(f"Query: {Q1}")
         # st.write(df)
-        fig = px.pie(df, values='count', names='name', title='Population of European continent',hover_data=['amount'])
+        fig = px.pie(df, values='Number_of_transactions', names='Type_of_Transaction', title='Population of European continent',hover_data=['Rs_in_Crores'])
         fig.update_traces(textposition='inside', textinfo='percent+label')
-
         st.plotly_chart(fig)
+        
+
+
         
         Q = f"SELECT state_name,sum(count) as count,sum(amount) as amount FROM aggregated_state_tx_df WHERE year = '{user_year}' and quarter = '{user_quarter}' group by state_name"#and state_name = '{user_state}';"
         df = pd.read_sql(Q,mydb)
