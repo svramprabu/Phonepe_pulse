@@ -1,6 +1,6 @@
 import streamlit as st
 import re
-
+import sqlite3
 from types import NoneType
 import os
 import json
@@ -574,70 +574,74 @@ def to_create_top_users_dataframe_by_state():
         sql = "insert into top_user_pincode_by_state values (?,?,?,?,?)"
         cursor.execute(sql,val)
         mydb.commit()
-    # st.write("Top users by district in 4 quarters from year 2018 to 2022")
-    # return (top_user_district_by_state,top_user_pincode_by_state)
-    # st.write("Top users by pincode in 4 quarters from year 2018 to 2022")
-    # st.write(top_user_pincode_by_state)
+   
     st.write("loaded to table top_user_district_by_state,top_user_pincode_by_state")
 
 
 if __name__ == "__main__":
-    import sqlite3
 
-    # Example usage
     repository_url = 'https://github.com/PhonePe/pulse'
-    # repository_url = 'https://github.com/username/repository.git'
-    destination_path = r'C:\Users\SVR\Documents\GitHub\Phonepe_pulse\pulse' 
+    destination_path = os.getcwd() #r'C:\Users\SVR\Documents\GitHub\Phonepe_pulse\pulse' 
 
     # clone_repository(repository_url, destination_path)
+    #enable this to clone the pulse data to your destination folder
+    
+    mydb = sqlite3.connect('phonepe_pulse.db')
+    cursor = mydb.cursor()
+    
 
-    try:
-        mydb = sqlite3.connect('phonepe_pulse.db')
-        cursor = mydb.cursor()
-        
-
-            #     # aggregated_tx_df = 
+    if st.button('aggregated_tx_df'):
         to_create_aggregated_transaction_dataframe()
-            
-            #     # aggregated_state_tx_df =  
+        
+    if st.button('aggregated_state_tx_df'):
+        #     # aggregated_state_tx_df =  
         to_create_aggregated_transaction_dataframe_by_state()
 
+    if st.button('aggregated_user_df'):
             #     # aggregated_user_df = 
         to_create_aggregated_user_dataframe()
             
+    if st.button('aggregated_state_user_df'):
             # #     # aggregated_state_user_df = 
         to_create_aggregated_user_dataframe_by_state()
             
+    if st.button('map_tx_df'):
             # #     # map_tx_df = 
         to_create_map_of_transactions_dataframe()
             
+    if st.button('map_state_tx_df'):
             # #     # map_state_tx_df = 
         to_create_map_of_transactions_dataframe_by_state()
             
+    if st.button('map_user_df'):
             # #     # map_user_df = 
         to_create_map_of_users_dataframe()
             
+    if st.button('map_state_user_df'):
             # #     # map_state_user_df = 
         to_create_map_of_users_dataframe_by_state()
             
+    if st.button('top_tx_df'):
             # #     # top_tx_df = 
         to_create_top_transactions_dataframe()
             
+    if st.button('top_district_tx_df,top_pincode_tx_df'):
             # #     # top_district_tx_df,top_pincode_tx_df = 
         to_create_top_transactions_dataframe_by_state()
             
+    if st.button('top_user_state,top_user_district,top_user_pincode'):
             # #     # top_user_state,top_user_district,top_user_pincode = 
         to_create_top_users_dataframe()
             
+    if st.button('top_user_district_by_state,top_user_pincode_by_state'):
             # #     # top_user_district_by_state,top_user_pincode_by_state = 
         to_create_top_users_dataframe_by_state()
             
-        
-
-        st.write('done')
     
-    except Error as e:
-        st.write("Error while connecting to MySQL", e)
+
+    st.write('done')
+    
+    
 
         
 
