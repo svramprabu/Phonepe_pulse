@@ -28,12 +28,12 @@ cursor.execute(sql_query)
 tables=[]
 for table in (cursor.fetchall()):
         tables.append(table[0])
-if(st.button("view df")):
+# if(st.button("view df")):
     
-    table_option = st.selectbox("list of tables in db",tables)
-    # st.write(tables)
-    query = f"SELECT * FROM {table_option};"
-    display_df = pd.read_sql(query,mydb)
+#     table_option = st.selectbox("list of tables in db",tables)
+#     # st.write(tables)
+#     query = f"SELECT * FROM {table_option};"
+#     display_df = pd.read_sql(query,mydb)
     # st.write(display_df)
 
 if user_option == 'transactions':
